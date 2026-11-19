@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#09040a" />
+  <title>Smartshop — Listas de compras inteligentes</title>
+  <meta name="description" content="Smartshop: crie suas listas de compras, compartilhe com quem importa e estilize o aplicativo do seu jeito. Baixe para Android ou abra uma lista compartilhada." />
+  <link rel="icon" type="image/png" href="img/fav64.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,500;0,700;1,700;1,800&family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,600;1,700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #09040a;
+      --panel: #150a0e;
+      --panel-2: #1c0d13;
+      --line: rgba(239, 51, 64, 0.3);
+      --red: #ef3340;
+      --red-2: #ff5a66;
+      --red-deep: #8f1b27;
+      --violet: #8b3dff;
+      --violet-2: #c9a0ff;
+      --blue: #2f6bff;
+      --cyan: #22d3ee;
+      --amber: #f5a524;
+      --green: #34d399;
+      --text: #f7eef0;
+      --muted: #b8a2a7;
+      --serif: "Noto Serif", Georgia, "Times New Roman", serif;
+      --display: "Exo 2", system-ui, sans-serif;
+      --img-cart: url("img/cart-sm.webp");
+      --img-fundo: url("img/fundo-sm.webp");
+      --img-tela1: url("img/tela-inicio.webp");
+      --img-tela2: url("img/tela-opcoes.webp");
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--serif);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse 60% 40% at 15% 0%, rgba(47, 107, 255, 0.22), transparent 70%),
+        radial-gradient(ellipse 55% 45% at 90% 20%, rgba(139, 61, 255, 0.16), transparent 70%),
+        radial-gradient(ellipse 70% 40% at 50% 100%, rgba(239, 51, 64, 0.2), transparent 70%),
+        var(--bg);
+    }
+    a { color: inherit; }
+    button { font: inherit; color: inherit; }
+    svg.i { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+    .hidden { display: none !important; }
+    .wrap { width: min(1120px, 100% - 32px); margin-inline: auto; }
+    main { display: flex; flex-direction: column; }
+    section { scroll-margin-top: 80px; }
+
+    /* ---------- Tipografia ---------- */
+    .wordmark {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      line-height: 1;
+      background: linear-gradient(180deg, #d9bcff 0%, #8b3dff 58%, #6d28d9 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 16px rgba(139, 61, 255, 0.5));
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--red-2);
+    }
+    .eyebrow::before { content: ""; width: 22px; height: 2px; background: linear-gradient(90deg, var(--red), transparent); box-shadow: 0 0 10px var(--red); }
+    .h2 {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 800;
+      font-size: clamp(28px, 5.4vw, 44px);
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin: 10px 0 12px;
+      background: linear-gradient(180deg, #fff 0%, #e9d9ff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .lead { color: var(--muted); font-size: 16px; max-width: 620px; }
+    .section-head { margin-bottom: 36px; }
+    .section-head.center { text-align: center; }
+    .section-head.center .lead { margin-inline: auto; }
+    .section-head.center .eyebrow::after { content: ""; width: 22px; height: 2px; background: linear-gradient(270deg, var(--red), transparent); box-shadow: 0 0 10px var(--red); }
+
+    /* ---------- Botões ---------- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 15px 24px;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: transform 0.15s ease, box-shadow 0.25s ease, filter 0.25s ease, border-color 0.25s ease;
+    }
+    .btn svg { font-size: 20px; }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(135deg, #ff4d5a 0%, #d3202f 55%, #a5141f 100%);
+      border-color: rgba(255, 140, 148, 0.5);
+      box-shadow: 0 10px 30px rgba(239, 51, 64, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+    .btn-primary:hover { filter: brightness(1.1); box-shadow: 0 14px 38px rgba(239, 51, 64, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.25); }
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: var(--line);
+      box-shadow: inset 0 0 18px rgba(239, 51, 64, 0.07);
+    }
+    .btn-ghost:hover { border-color: rgba(239, 51, 64, 0.7); box-shadow: inset 0 0 22px rgba(239, 51, 64, 0.16), 0 0 20px rgba(239, 51, 64, 0.2); }
+    .btn[disabled], .btn.is-disabled { opacity: 0.45; pointer-events: none; filter: saturate(0.6); }
+    .btn.done { border-color: var(--green); color: #6ee7b7; box-shadow: 0 0 20px rgba(52, 211, 153, 0.28); }
+
+    /* ---------- Navegação ---------- */
+    .nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 50;
+      height: 68px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: linear-gradient(180deg, rgba(9, 4, 10, 0.88), rgba(9, 4, 10, 0.6));
+      border-bottom: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, rgba(239, 51, 64, 0.55), transparent) 1;
+    }
+    .nav .wrap { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .brand-logo { width: 42px; height: 42px; background: var(--img-cart) center / contain no-repeat; filter: drop-shadow(0 0 10px rgba(139, 61, 255, 0.7)); }
+    .brand .wordmark { font-size: 26px; }
+    .nav-links { display: none; align-items: center; gap: 6px; list-style: none; }
+    .nav-links a {
+      display: block;
+      padding: 8px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      text-decoration: none;
+      border-radius: 12px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); background: rgba(239, 51, 64, 0.1); }
+    .nav-cta { display: none; padding: 10px 18px; font-size: 13.5px; border-radius: 13px; }
+    .burger {
+      width: 44px; height: 44px;
+      display: grid; place-items: center;
+      font-size: 24px;
+      border-radius: 14px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--line);
+    }
+    .mobile-menu {
+      position: fixed;
+      inset: 68px 0 auto 0;
+      z-index: 49;
+      padding: 12px 16px 20px;
+      background: rgba(12, 5, 8, 0.96);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line);
+      transform: translateY(-120%);
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .mobile-menu.open { transform: none; }
+    .mobile-menu a:not(.btn) {
+      display: block;
+      padding: 14px 6px;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      border-image: linear-gradient(90deg, rgba(239, 51, 64, 0.5), transparent) 1;
+    }
+    .mobile-menu .btn { width: 100%; margin-top: 16px; }
+
+    /* ---------- Hero ---------- */
+    .hero { position: relative; padding: 110px 0 70px; overflow: hidden; }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: var(--img-fundo) center 0% / cover no-repeat;
+      opacity: 0.34;
+      filter: saturate(1.15) blur(1px);
+      -webkit-mask-image: linear-gradient(180deg, #000 30%, transparent 96%);
+      mask-image: linear-gradient(180deg, #000 30%, transparent 96%);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, var(--bg) 0%, rgba(9, 4, 10, 0.55) 55%, rgba(9, 4, 10, 0.2) 100%);
+      pointer-events: none;
+    }
+    .hero .wrap { position: relative; z-index: 1; display: grid; gap: 34px; align-items: center; }
+    .hero h1 { font-size: clamp(54px, 14vw, 108px); margin: 14px 0 6px; }
+    .neon-line {
+      width: min(360px, 72%);
+      height: 2px;
+      margin-bottom: 20px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan), transparent);
+      box-shadow: 0 0 12px var(--blue), 0 0 26px rgba(34, 211, 238, 0.4);
+    }
+    .hero .lead { font-size: 17px; margin-bottom: 26px; color: #d8c6cb; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--violet-2);
+      border-radius: 999px;
+      background: rgba(139, 61, 255, 0.1);
+      border: 1px solid rgba(139, 61, 255, 0.4);
+    }
+    .chip svg { font-size: 15px; }
+
+    .stage { position: relative; width: min(440px, 88%); margin-inline: auto; aspect-ratio: 1; }
+    .stage .glow {
+      position: absolute;
+      inset: 10% 8%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139, 61, 255, 0.5), transparent 68%);
+      filter: blur(28px);
+      animation: pulse 5s ease-in-out infinite;
+    }
+    .stage .ring {
+      position: absolute;
+      left: 6%; right: 6%; bottom: 8%;
+      height: 24%;
+      border-radius: 50%;
+      border: 2px solid rgba(47, 107, 255, 0.9);
+      box-shadow: 0 0 22px var(--blue), inset 0 0 22px rgba(47, 107, 255, 0.5);
+      transform: perspective(500px) rotateX(62deg);
+    }
+    .stage .cart { position: absolute; inset: 0 0 6%; background: var(--img-cart) center / contain no-repeat; filter: drop-shadow(0 0 26px rgba(139, 61, 255, 0.6)); animation: float 6s ease-in-out infinite; }
+    .float-card {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      font-size: 12.5px;
+      font-weight: 600;
+      border-radius: 16px;
+      background: rgba(21, 10, 14, 0.82);
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 18px rgba(239, 51, 64, 0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      animation: float 7s ease-in-out infinite;
+    }
+    .float-card .ic { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 9px; font-size: 16px; }
+    .float-card small { display: block; font-size: 11px; font-weight: 400; color: var(--muted); }
+    .fc-1 { top: 6%; right: -2%; animation-delay: -2s; }
+    .fc-1 .ic { background: rgba(52, 211, 153, 0.14); color: var(--green); }
+    .fc-2 { bottom: 20%; left: -4%; animation-delay: -4s; }
+    .fc-2 .ic { background: rgba(239, 51, 64, 0.14); color: var(--red-2); }
+
+    /* ---------- Receber lista (função principal) ---------- */
+    .receive { order: -1; padding: 92px 0 6px; position: relative; z-index: 2; }
+    .hero { padding-top: 44px; }
+    .frame {
+      width: min(560px, 100%);
+      margin-inline: auto;
+      padding: 2px;
+      border-radius: 34px;
+      background: linear-gradient(160deg, #ff4d5a 0%, var(--red-deep) 38%, #3a0d14 62%, #ef3340 100%);
+      box-shadow: 0 0 0 1px rgba(239, 51, 64, 0.25), 0 0 44px rgba(239, 51, 64, 0.25), 0 30px 60px rgba(0, 0, 0, 0.55);
+    }
+    .receive-card {
+      position: relative;
+      padding: 30px 22px 24px;
+      border-radius: 32px;
+      text-align: center;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 90% 40% at 50% 0%, rgba(47, 107, 255, 0.18), transparent 70%),
+        linear-gradient(180deg, var(--panel-2), var(--panel) 45%, #0e0709);
+    }
+    .receive-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(47, 107, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(47, 107, 255, 0.05) 1px, transparent 1px);
+      background-size: 28px 28px;
+      -webkit-mask-image: radial-gradient(ellipse 80% 40% at 50% 0%, #000, transparent 75%);
+      mask-image: radial-gradient(ellipse 80% 40% at 50% 0%, #000, transparent 75%);
+      pointer-events: none;
+    }
+    .receive-card > * { position: relative; }
+    .receive-logo { width: 96px; height: 96px; margin: 0 auto 6px; background: var(--img-cart) center / contain no-repeat; filter: drop-shadow(0 0 16px rgba(139, 61, 255, 0.7)); animation: float 6s ease-in-out infinite; }
+    .receive-card h2 { font-family: var(--display); font-style: italic; font-weight: 800; font-size: 26px; line-height: 1.15; margin: 8px 0 8px; }
+    .receive-card .status { font-size: 14px; line-height: 1.6; color: var(--muted); max-width: 400px; margin: 0 auto 18px; }
+    .divider { height: 3px; margin: 0 -4px 20px; border-radius: 3px; background: linear-gradient(90deg, transparent, var(--red) 50%, transparent); box-shadow: 0 0 12px rgba(239, 51, 64, 0.55); }
+    .field { text-align: left; margin-bottom: 16px; }
+    .label {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--red); margin: 0 4px 8px;
+    }
+    .label::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(239, 51, 64, 0.6), transparent); }
+    .code-box, .code-input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: #07040a;
+      border: 1px solid rgba(139, 61, 255, 0.45);
+      box-shadow: inset 0 0 24px rgba(139, 61, 255, 0.1), 0 0 18px rgba(139, 61, 255, 0.12);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 13px; font-weight: 700; line-height: 1.5; letter-spacing: 0.03em;
+      color: var(--violet-2);
+    }
+    .code-box { word-break: break-all; user-select: all; -webkit-user-select: all; max-height: 120px; overflow: auto; }
+    .input-row { display: flex; gap: 10px; align-items: stretch; }
+    .input-row .code-input { flex: 1; min-width: 0; }
+    .paste-btn {
+      flex: none; display: inline-flex; align-items: center; gap: 8px;
+      padding: 0 16px; font-size: 14px; font-weight: 700; cursor: pointer;
+      color: var(--violet-2);
+      border-radius: 18px;
+      background: rgba(139, 61, 255, 0.12);
+      border: 1px solid rgba(139, 61, 255, 0.55);
+      box-shadow: 0 0 16px rgba(139, 61, 255, 0.18);
+      transition: background 0.2s, transform 0.12s;
+    }
+    .paste-btn:hover { background: rgba(139, 61, 255, 0.22); }
+    .paste-btn:active { transform: scale(0.96); }
+    .paste-btn svg { font-size: 18px; }
+    .code-input { outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .code-input::placeholder { color: #6f5a8f; font-weight: 500; }
+    .code-input:focus { border-color: var(--violet); box-shadow: inset 0 0 24px rgba(139, 61, 255, 0.14), 0 0 24px rgba(139, 61, 255, 0.35); }
+    .actions { display: grid; gap: 11px; margin-bottom: 20px; }
+    .actions .btn { width: 100%; padding: 16px 18px; border-radius: 18px; }
+
+    .steps { text-align: left; }
+    .steps-title { font-size: 15px; font-weight: 700; margin: 0 4px 4px; }
+    .step { display: flex; align-items: center; gap: 14px; padding: 12px 4px; }
+    .step + .step { border-top: 1px solid transparent; border-image: linear-gradient(90deg, transparent, rgba(239, 51, 64, 0.6), transparent) 1; }
+    .step-icon { flex: none; width: 36px; height: 36px; display: grid; place-items: center; border-radius: 12px; font-size: 18px; color: var(--red); background: rgba(239, 51, 64, 0.1); border: 1px solid rgba(239, 51, 64, 0.35); }
+    .step-text { font-size: 13.5px; line-height: 1.5; color: var(--muted); }
+    .step-text strong { color: var(--red-2); font-weight: 700; }
+    .receive .download-mini {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 14px; padding: 10px 16px;
+      font-size: 12.5px; font-weight: 600; text-decoration: none;
+      color: var(--violet-2);
+      border-radius: 999px;
+      border: 1px solid rgba(139, 61, 255, 0.5);
+      background: rgba(139, 61, 255, 0.08);
+      box-shadow: 0 0 16px rgba(139, 61, 255, 0.15);
+      transition: background 0.2s;
+    }
+    .receive .download-mini:hover { background: rgba(139, 61, 255, 0.18); }
+    .receive .download-mini svg { font-size: 16px; }
+
+    /* ---------- Recursos ---------- */
+    .features { padding: 80px 0 40px; }
+    .grid-feat { display: grid; gap: 16px; grid-template-columns: 1fr; }
+    .feat {
+      position: relative;
+      padding: 24px 22px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(28, 13, 19, 0.9), rgba(16, 8, 11, 0.9));
+      border: 1px solid rgba(239, 51, 64, 0.22);
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+    }
+    .feat::before {
+      content: "";
+      position: absolute; inset: 0 0 auto 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent, var(--red)), transparent);
+      opacity: 0.8;
+    }
+    .feat:hover { transform: translateY(-4px); border-color: var(--accent, var(--red)); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45), 0 0 26px color-mix(in srgb, var(--accent, #ef3340) 25%, transparent); }
+    .feat .ico {
+      width: 48px; height: 48px; display: grid; place-items: center;
+      margin-bottom: 16px; font-size: 24px;
+      border-radius: 15px;
+      color: var(--accent, var(--red));
+      background: color-mix(in srgb, var(--accent, #ef3340) 12%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent, #ef3340) 45%, transparent);
+      box-shadow: 0 0 20px color-mix(in srgb, var(--accent, #ef3340) 22%, transparent);
+    }
+    .feat h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+    .feat p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ---------- Painel (dashboard) ---------- */
+    .dash { padding: 70px 0; }
+    .window {
+      padding: 2px;
+      border-radius: 28px;
+      background: linear-gradient(160deg, rgba(255, 77, 90, 0.9), var(--red-deep) 35%, #2a0a10 65%, rgba(139, 61, 255, 0.8));
+      box-shadow: 0 0 60px rgba(139, 61, 255, 0.18), 0 40px 80px rgba(0, 0, 0, 0.6);
+    }
+    .window-in { border-radius: 26px; overflow: hidden; background: linear-gradient(180deg, #170b10, #0d0609); }
+    .titlebar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 18px;
+      border-bottom: 1px solid rgba(239, 51, 64, 0.22);
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .titlebar i { width: 11px; height: 11px; border-radius: 50%; display: block; }
+    .titlebar i:nth-child(1) { background: #ef3340; }
+    .titlebar i:nth-child(2) { background: #f5a524; }
+    .titlebar i:nth-child(3) { background: #34d399; }
+    .titlebar span { margin-left: 10px; font-size: 12px; color: var(--muted); letter-spacing: 0.04em; }
+    .titlebar .demo-tag { margin-left: auto; padding: 3px 10px; border-radius: 999px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--violet-2); border: 1px solid rgba(139, 61, 255, 0.5); background: rgba(139, 61, 255, 0.1); }
+    .app-body { display: grid; grid-template-columns: 1fr; }
+    .sidebar { display: none; padding: 20px 14px; border-right: 1px solid rgba(239, 51, 64, 0.2); background: rgba(255, 255, 255, 0.015); }
+    .side-group + .side-group { margin-top: 18px; }
+    .side-title { font-size: 15px; font-weight: 700; margin: 0 10px 6px; }
+    .side-item { display: flex; align-items: center; gap: 12px; padding: 9px 10px; font-size: 13.5px; color: var(--red-2); border-radius: 12px; }
+    .side-item svg { font-size: 18px; }
+    .side-item.on { background: rgba(239, 51, 64, 0.12); box-shadow: inset 0 0 0 1px rgba(239, 51, 64, 0.35); color: #ffb4ba; }
+    .main { padding: 20px 16px 22px; min-width: 0; }
+    .main-top { display: flex; flex-direction: column; gap: 14px; margin-bottom: 18px; }
+    .main-top h3 { font-family: var(--display); font-style: italic; font-weight: 800; font-size: 24px; }
+    .search {
+      display: flex; align-items: center; gap: 10px;
+      padding: 0 14px;
+      height: 44px;
+      border-radius: 14px;
+      background: #08040a;
+      border: 1px solid rgba(239, 51, 64, 0.35);
+      color: var(--red-2);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search:focus-within { border-color: var(--red); box-shadow: 0 0 18px rgba(239, 51, 64, 0.3); }
+    .search svg { font-size: 18px; }
+    .search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; font: inherit; font-size: 14px; color: var(--text); }
+    .search input::placeholder { color: #7c6268; }
+    .kpis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 18px; }
+    .kpi { padding: 14px 14px 12px; border-radius: 18px; background: rgba(255, 255, 255, 0.025); border: 1px solid rgba(239, 51, 64, 0.2); }
+    .kpi small { display: block; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .kpi b { display: block; font-family: var(--display); font-size: 30px; font-weight: 700; line-height: 1.15; margin-top: 2px; }
+    .kpi:nth-child(1) b { color: var(--violet-2); }
+    .kpi:nth-child(2) b { color: var(--cyan); }
+    .kpi:nth-child(3) b { color: var(--green); }
+    .kpi:nth-child(4) b { color: var(--amber); }
+    .panes { display: grid; gap: 16px; grid-template-columns: 1fr; }
+    .pane-title { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); margin: 0 4px 10px; }
+    .list-cards { display: grid; gap: 10px; }
+    .list-card {
+      display: flex; align-items: center; gap: 14px;
+      width: 100%;
+      padding: 12px 14px;
+      text-align: left;
+      border-radius: 18px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(239, 51, 64, 0.2);
+      transition: border-color 0.25s, background 0.25s, transform 0.15s, box-shadow 0.25s;
+    }
+    .list-card:hover { border-color: rgba(239, 51, 64, 0.55); }
+    .list-card:active { transform: scale(0.985); }
+    .list-card[aria-pressed="true"] { background: rgba(239, 51, 64, 0.09); border-color: var(--red); box-shadow: 0 0 24px rgba(239, 51, 64, 0.2), inset 0 0 22px rgba(239, 51, 64, 0.06); }
+    .list-card .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; box-shadow: 0 0 10px currentColor; }
+    .lc-body { flex: 1; min-width: 0; }
+    .lc-name { display: block; font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .lc-meta { display: block; font-size: 12px; color: var(--muted); }
+    .ring { width: 54px; height: 54px; flex: none; }
+    .ring-bg { fill: none; stroke: rgba(255, 255, 255, 0.08); stroke-width: 5; }
+    .ring-fg { fill: none; stroke-width: 5; stroke-linecap: round; transform: rotate(-90deg); transform-origin: 28px 28px; transition: stroke-dasharray 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); filter: drop-shadow(0 0 4px currentColor); }
+    .ring text { font-family: var(--display); font-size: 12.5px; font-weight: 700; fill: var(--text); }
+    .detail { padding: 16px; border-radius: 20px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(239, 51, 64, 0.22); }
+    .detail-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+    .detail-head h4 { font-size: 17px; font-weight: 700; line-height: 1.25; }
+    .detail-head p { font-size: 12.5px; color: var(--muted); }
+    .mini-btn {
+      display: inline-flex; align-items: center; gap: 6px; flex: none;
+      padding: 7px 12px; font-size: 12px; font-weight: 700;
+      border-radius: 11px; cursor: pointer;
+      color: var(--red-2);
+      background: rgba(239, 51, 64, 0.08);
+      border: 1px solid rgba(239, 51, 64, 0.4);
+      transition: background 0.2s;
+    }
+    .mini-btn:hover { background: rgba(239, 51, 64, 0.18); }
+    .mini-btn svg { font-size: 15px; }
+    .bar { height: 6px; border-radius: 6px; background: rgba(255, 255, 255, 0.07); overflow: hidden; margin-bottom: 8px; }
+    .bar i { display: block; height: 100%; width: 0; border-radius: 6px; background: linear-gradient(90deg, var(--blue), var(--violet), var(--red)); box-shadow: 0 0 12px rgba(139, 61, 255, 0.7); transition: width 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    .items { list-style: none; }
+    .item { border-top: 1px solid transparent; border-image: linear-gradient(90deg, transparent, rgba(239, 51, 64, 0.4), transparent) 1; }
+    .item:first-child { border-top: 0; border-image: none; }
+    .item button {
+      display: flex; align-items: center; gap: 12px;
+      width: 100%; padding: 11px 4px;
+      text-align: left; font-size: 14.5px;
+      background: none; border: 0; cursor: pointer;
+    }
+    .box {
+      width: 22px; height: 22px; flex: none;
+      display: grid; place-items: center;
+      border-radius: 7px;
+      border: 1.6px solid rgba(239, 51, 64, 0.6);
+      color: transparent;
+      font-size: 15px;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    .item.done .box { background: var(--red); color: #fff; box-shadow: 0 0 12px rgba(239, 51, 64, 0.6); }
+    .item.done .txt { color: #8a7479; text-decoration: line-through; text-decoration-color: rgba(239, 51, 64, 0.7); }
+    .empty { padding: 20px 6px; font-size: 14px; color: var(--muted); text-align: center; }
+
+    /* ---------- Telas ---------- */
+    .screens { padding: 50px 0 70px; }
+    .phones { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 10px 16px 24px; margin-inline: -16px; scrollbar-width: none; }
+    .phones::-webkit-scrollbar { display: none; }
+    .phone-wrap { flex: 0 0 64%; max-width: 280px; scroll-snap-align: center; text-align: center; }
+    .phone {
+      padding: 9px;
+      border-radius: 40px;
+      background: linear-gradient(160deg, #3a3a44, #121216 40%, #26262e);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(239, 51, 64, 0.16);
+    }
+    .screen { position: relative; aspect-ratio: 1080 / 2019; border-radius: 32px; overflow: hidden; background-color: #0b0507; background-size: cover; background-position: center; }
+    .screen::after { content: ""; position: absolute; top: 9px; left: 50%; width: 10px; height: 10px; border-radius: 50%; background: #050507; transform: translateX(-50%); box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05); }
+    .s1 { background-image: var(--img-tela1); }
+    .s2 { background-image: var(--img-fundo); }
+    .s3 { background-image: var(--img-tela2); }
+    .phone-cap { margin-top: 16px; font-size: 14px; font-weight: 700; }
+    .phone-cap small { display: block; font-weight: 400; font-size: 12.5px; color: var(--muted); }
+
+    /* ---------- Compartilhar ---------- */
+    .share { padding: 40px 0 70px; }
+    .timeline { display: grid; gap: 16px; counter-reset: s; }
+    .tl {
+      position: relative;
+      padding: 22px 20px 22px 76px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(239, 51, 64, 0.22);
+    }
+    .tl::before {
+      counter-increment: s;
+      content: counter(s);
+      position: absolute; left: 18px; top: 20px;
+      width: 42px; height: 42px; display: grid; place-items: center;
+      font-family: var(--display); font-size: 20px; font-weight: 800;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(139, 61, 255, 0.35), rgba(47, 107, 255, 0.25));
+      border: 1px solid rgba(139, 61, 255, 0.6);
+      box-shadow: 0 0 18px rgba(139, 61, 255, 0.35);
+    }
+    .tl h3 { font-size: 17px; margin-bottom: 4px; }
+    .tl p { font-size: 14px; color: var(--muted); }
+    .tl strong { color: var(--red-2); }
+
+    /* ---------- Download ---------- */
+    .get { padding: 20px 0 80px; }
+    .get-card {
+      position: relative; overflow: hidden;
+      display: grid; gap: 20px; align-items: center;
+      padding: 34px 24px;
+      border-radius: 32px;
+      text-align: center;
+      border: 1px solid rgba(139, 61, 255, 0.5);
+      background:
+        radial-gradient(ellipse 70% 80% at 80% 10%, rgba(139, 61, 255, 0.28), transparent 70%),
+        radial-gradient(ellipse 60% 80% at 10% 100%, rgba(239, 51, 64, 0.26), transparent 70%),
+        linear-gradient(180deg, #1c0d13, #0e0709);
+      box-shadow: 0 0 60px rgba(139, 61, 255, 0.15);
+    }
+    .get-card .cart-sm { width: 140px; height: 140px; margin-inline: auto; background: var(--img-cart) center / contain no-repeat; filter: drop-shadow(0 0 22px rgba(139, 61, 255, 0.7)); animation: float 6s ease-in-out infinite; }
+    .get-card h2 { font-family: var(--display); font-style: italic; font-weight: 800; font-size: clamp(28px, 6vw, 40px); line-height: 1.1; margin-bottom: 10px; }
+    .get-card p { color: var(--muted); max-width: 480px; margin: 0 auto 22px; }
+    .get-card small { display: block; margin-top: 14px; font-size: 12.5px; color: #8f7a80; }
+
+    /* ---------- Rodapé ---------- */
+    footer { margin-top: auto; padding: 30px 0 calc(34px + env(safe-area-inset-bottom)); border-top: 1px solid transparent; border-image: linear-gradient(90deg, transparent, rgba(239, 51, 64, 0.5), transparent) 1; }
+    footer .wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+    footer .brand .wordmark { font-size: 24px; }
+    footer p { font-size: 13px; color: #8f7a80; }
+    footer nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 18px; font-size: 13.5px; }
+    footer nav a { color: var(--muted); text-decoration: none; }
+    footer nav a:hover { color: var(--text); }
+
+    /* ---------- Animações ---------- */
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+    @keyframes pulse { 0%, 100% { opacity: 0.75; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+
+    /* ---------- Responsivo ---------- */
+    @media (min-width: 640px) {
+      .grid-feat { grid-template-columns: repeat(2, 1fr); }
+      .kpis { grid-template-columns: repeat(4, 1fr); }
+      .timeline { grid-template-columns: repeat(3, 1fr); }
+      .tl { padding: 74px 20px 24px; }
+      .tl::before { left: 20px; top: 20px; }
+      .main-top { flex-direction: row; align-items: center; justify-content: space-between; }
+      .search { width: 260px; }
+      .get-card { padding: 46px 40px; }
+    }
+    @media (min-width: 900px) {
+      .nav-links, .nav-cta { display: flex; }
+      .burger, .mobile-menu { display: none; }
+      .hero { padding: 80px 0 90px; }
+      .hero .wrap { grid-template-columns: 1.05fr 0.95fr; gap: 40px; }
+      .receive { padding-top: 108px; }
+      .grid-feat { grid-template-columns: repeat(4, 1fr); }
+      .app-body { grid-template-columns: 220px 1fr; }
+      .sidebar { display: block; }
+      .main { padding: 24px 26px 28px; }
+      .panes { grid-template-columns: 1fr 1.05fr; gap: 22px; align-items: start; }
+      .phones { overflow: visible; justify-content: center; gap: 36px; padding: 10px 0 30px; margin-inline: 0; }
+      .phone-wrap { flex: 0 0 270px; }
+      .phone-wrap:nth-child(2) { transform: translateY(-26px); }
+      .get-card { grid-template-columns: 220px 1fr; text-align: left; gap: 40px; }
+      .get-card p { margin-inline: 0; }
+      footer .wrap { flex-direction: row; justify-content: space-between; text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ícones -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-share" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6"/></symbol>
+      <symbol id="i-list" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 4V3h6v1M8.5 10l1.5 1.5L12.5 9M14 11h2.5M8.5 16l1.5 1.5 2.5-2.5M14 17h2.5"/></symbol>
+      <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-.9 2-1.8 0-1.4-1.2-1.6-1.2-2.8 0-1 .8-1.6 1.8-1.6H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="3"/><path d="M5 15V6a3 3 0 0 1 3-3h9"/></symbol>
+      <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M10 9.5l2-2 2 2M12 7.5v6M10.5 18.5h3"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3.5v12M7 11l5 5 5-5M5 20.5h14"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+      <symbol id="i-checkbox" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></symbol>
+      <symbol id="i-image" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9.5" r="1.6"/><path d="M4.5 17l4.5-4.5 3.5 3.5 2.5-2.5 4.5 4.5"/></symbol>
+      <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-13C17 4 14 4.5 12 6zM12 6v13"/></symbol>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v8.5a1.5 1.5 0 0 1-1.5 1.5H15v-6H9v6H5.5A1.5 1.5 0 0 1 4 19.5z"/></symbol>
+      <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20 11.5a8 8 0 0 1-11.6 7.1L4 20l1.4-4.2A8 8 0 1 1 20 11.5z"/></symbol>
+      <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+      <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+      <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.7 2 2 .7-2 .7L19 21l-.7-1.6-2-.7 2-.7z"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2.5l2.2 11h10.1l2-8H7"/><circle cx="9.5" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/></symbol>
+    </defs>
+  </svg>
+
+  <!-- Navegação -->
+  <header class="nav">
+    <div class="wrap">
+      <a class="brand" href="#topo" aria-label="Smartshop — início">
+        <span class="brand-logo" aria-hidden="true"></span>
+        <span class="wordmark">Smartshop</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#recursos">Recursos</a></li>
+        <li><a href="#painel">Painel</a></li>
+        <li><a href="#telas">Telas</a></li>
+        <li><a href="#compartilhar">Compartilhar</a></li>
+      </ul>
+      <a class="btn btn-primary nav-cta" href="https://github.com/ryckteixeira-sketch/smartshop/releases/latest" target="_blank" rel="noopener noreferrer">
+        <svg class="i"><use href="#i-download"/></svg> Baixar app
+      </a>
+      <button class="burger" id="burger" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu">
+        <svg class="i" id="burgerIcon"><use href="#i-menu"/></svg>
+      </button>
+    </div>
+  </header>
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Menu">
+    <a href="#recursos">Recursos</a>
+    <a href="#painel">Painel</a>
+    <a href="#telas">Telas</a>
+    <a href="#compartilhar">Compartilhar</a>
+    <a class="btn btn-primary" href="https://github.com/ryckteixeira-sketch/smartshop/releases/latest" target="_blank" rel="noopener noreferrer"><svg class="i"><use href="#i-download"/></svg> Baixar para Android</a>
+  </nav>
+
+  <main id="topo">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="wrap">
+        <div>
+          <span class="eyebrow">Listas de compras inteligentes</span>
+          <h1 class="wordmark">Smartshop</h1>
+          <div class="neon-line"></div>
+          <p class="lead">Crie sua lista, compartilhe com quem importa e estilize o aplicativo do seu jeito. Tudo num só lugar, rápido e bonito.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="https://github.com/ryckteixeira-sketch/smartshop/releases/latest" target="_blank" rel="noopener noreferrer"><svg class="i"><use href="#i-download"/></svg> Baixar para Android</a>
+            <a class="btn btn-ghost" href="#painel"><svg class="i"><use href="#i-spark"/></svg> Ver o painel</a>
+          </div>
+          <div class="chips">
+            <span class="chip"><svg class="i"><use href="#i-share"/></svg> Compartilhe por link</span>
+            <span class="chip"><svg class="i"><use href="#i-palette"/></svg> Personalizável</span>
+            <span class="chip"><svg class="i"><use href="#i-db"/></svg> Salvar e restaurar</span>
+          </div>
+        </div>
+        <div class="stage" aria-hidden="true">
+          <div class="glow"></div>
+          <div class="ring"></div>
+          <div class="cart"></div>
+          <div class="float-card fc-1"><span class="ic"><svg class="i"><use href="#i-check"/></svg></span><span>Lista concluída<small>12 de 12 itens</small></span></div>
+          <div class="float-card fc-2"><span class="ic"><svg class="i"><use href="#i-share"/></svg></span><span>Lista compartilhada<small>aberta no app</small></span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Receber lista compartilhada (função original) -->
+    <section class="receive" id="receber">
+      <div class="wrap">
+        <div class="frame">
+          <div class="receive-card">
+            <div class="receive-logo" aria-hidden="true"></div>
+            <span class="eyebrow" style="justify-content:center">Lista compartilhada</span>
+            <h2 class="wordmark" style="font-size:30px;margin:10px 0 8px">Receber lista</h2>
+            <p class="status" id="statusText">Nenhum código de lista foi encontrado neste link. Se você recebeu um código, cole abaixo para abrir no Smartshop.</p>
+            <div class="divider"></div>
+
+            <div class="field">
+              <div class="label" id="codeLabel">Código da lista</div>
+              <div class="code-box hidden" id="tokenBox" aria-labelledby="codeLabel"></div>
+              <div class="input-row" id="inputRow">
+                <input class="code-input" id="tokenInput" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Cole aqui o código da lista" aria-labelledby="codeLabel" />
+                <button class="paste-btn" id="pasteBtn" type="button" aria-label="Colar código da área de transferência"><svg class="i"><use href="#i-list"/></svg><span>Colar</span></button>
+              </div>
+            </div>
+
+            <div class="actions">
+              <a id="openAppBtn" href="#" class="btn btn-primary is-disabled" aria-disabled="true">
+                <svg class="i"><use href="#i-phone"/></svg><span>Abrir no Smartshop</span>
+              </a>
+              <button id="copyBtn" type="button" class="btn btn-ghost" disabled>
+                <svg class="i"><use href="#i-copy"/></svg><span id="copyLabel">Copiar código</span>
+              </button>
+            </div>
+
+            <div class="steps" id="manualSteps">
+              <div class="steps-title">Caso não abra automaticamente</div>
+              <div class="step">
+                <div class="step-icon"><svg class="i"><use href="#i-phone"/></svg></div>
+                <div class="step-text">Toque em <strong>Abrir no Smartshop</strong> acima.</div>
+              </div>
+              <div class="step">
+                <div class="step-icon"><svg class="i"><use href="#i-copy"/></svg></div>
+                <div class="step-text">Ou toque em <strong>Copiar código</strong>.</div>
+              </div>
+              <div class="step">
+                <div class="step-icon"><svg class="i"><use href="#i-menu"/></svg></div>
+                <div class="step-text">Abra o Smartshop ➔ <strong>☰</strong> ➔ <strong>Receber lista</strong> ➔ <strong>Colar código</strong>.</div>
+              </div>
+            </div>
+
+            <a class="download-mini" href="https://github.com/ryckteixeira-sketch/smartshop/releases/latest" target="_blank" rel="noopener noreferrer">
+              <svg class="i"><use href="#i-download"/></svg> Ainda não tem o app? Baixar Smartshop (Android)
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recursos -->
+    <section class="features" id="recursos">
+      <div class="wrap">
+        <div class="section-head center reveal">
+          <span class="eyebrow">Recursos</span>
+          <h2 class="h2">Feito para o seu dia a dia</h2>
+          <p class="lead">Do primeiro item até a lista compartilhada com a família, o Smartshop cuida dos detalhes.</p>
+        </div>
+        <div class="grid-feat">
+          <article class="feat reveal" style="--accent:#ef3340"><div class="ico"><svg class="i"><use href="#i-list"/></svg></div><h3>Crie sua lista</h3><p>Adicione produtos em segundos com o botão “+” e organize tudo em listas.</p></article>
+          <article class="feat reveal" style="--accent:#8b3dff"><div class="ico"><svg class="i"><use href="#i-share"/></svg></div><h3>Compartilhe</h3><p>Envie sua lista por link e ela abre direto no app de quem recebe.</p></article>
+          <article class="feat reveal" style="--accent:#2f6bff"><div class="ico"><svg class="i"><use href="#i-palette"/></svg></div><h3>Estilize seu aplicativo</h3><p>Personalize o visual do app para deixá-lo com a sua cara.</p></article>
+          <article class="feat reveal" style="--accent:#22d3ee"><div class="ico"><svg class="i"><use href="#i-book"/></svg></div><h3>Lista inteligente</h3><p>Compartilhe no formato de lista inteligente do Smartshop.</p></article>
+          <article class="feat reveal" style="--accent:#f5a524"><div class="ico"><svg class="i"><use href="#i-image"/></svg></div><h3>Em imagem</h3><p>Prefere algo visual? Compartilhe sua lista como imagem.</p></article>
+          <article class="feat reveal" style="--accent:#ef3340"><div class="ico"><svg class="i"><use href="#i-search"/></svg></div><h3>Pesquisar</h3><p>Encontre qualquer item da lista rapidamente.</p></article>
+          <article class="feat reveal" style="--accent:#34d399"><div class="ico"><svg class="i"><use href="#i-checkbox"/></svg></div><h3>Duplicar e marcar tudo</h3><p>Duplique listas e marque ou desmarque todos os itens de uma vez.</p></article>
+          <article class="feat reveal" style="--accent:#8b3dff"><div class="ico"><svg class="i"><use href="#i-db"/></svg></div><h3>Salvar e restaurar</h3><p>Guarde seus dados e restaure quando precisar.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Painel -->
+    <section class="dash" id="painel">
+      <div class="wrap">
+        <div class="section-head center reveal">
+          <span class="eyebrow">Painel</span>
+          <h2 class="h2">Tudo sob controle num só painel</h2>
+          <p class="lead">Experimente: escolha uma lista, marque os itens e veja o progresso mudar na hora.</p>
+        </div>
+
+        <div class="window reveal">
+          <div class="window-in">
+            <div class="titlebar"><i></i><i></i><i></i><span>Smartshop · Minhas listas</span><em class="demo-tag" style="font-style:normal">Prévia</em></div>
+            <div class="app-body">
+              <aside class="sidebar" aria-hidden="true">
+                <div class="side-group">
+                  <div class="side-title">Atalhos</div>
+                  <div class="side-item"><svg class="i"><use href="#i-home"/></svg>Página inicial</div>
+                  <div class="side-item on"><svg class="i"><use href="#i-list"/></svg>Minhas listas</div>
+                  <div class="side-item"><svg class="i"><use href="#i-palette"/></svg>Personalizar</div>
+                  <div class="side-item"><svg class="i"><use href="#i-chat"/></svg>Meus contatos</div>
+                  <div class="side-item"><svg class="i"><use href="#i-db"/></svg>Salvar e restaurar</div>
+                </div>
+                <div class="side-group">
+                  <div class="side-title">Compartilhar</div>
+                  <div class="side-item"><svg class="i"><use href="#i-image"/></svg>Imagem</div>
+                  <div class="side-item"><svg class="i"><use href="#i-book"/></svg>Lista inteligente</div>
+                </div>
+              </aside>
+
+              <div class="main">
+                <div class="main-top">
+                  <h3 class="wordmark" style="font-size:26px">Minhas listas</h3>
+                  <label class="search"><svg class="i"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Pesquisar listas" aria-label="Pesquisar listas" /></label>
+                </div>
+
+                <div class="kpis" id="kpis">
+                  <div class="kpi"><small>Listas</small><b id="k1">0</b></div>
+                  <div class="kpi"><small>Itens</small><b id="k2">0</b></div>
+                  <div class="kpi"><small>Concluído</small><b id="k3">0%</b></div>
+                  <div class="kpi"><small>Pendentes</small><b id="k4">0</b></div>
+                </div>
+
+                <div class="panes">
+                  <div>
+                    <div class="pane-title">Suas listas</div>
+                    <div class="list-cards" id="listCards"></div>
+                    <p class="empty hidden" id="noResults">Nenhuma lista encontrada.</p>
+                  </div>
+                  <div>
+                    <div class="pane-title">Lista aberta</div>
+                    <div class="detail">
+                      <div class="detail-head">
+                        <div><h4 id="dName">—</h4><p id="dSub">—</p></div>
+                        <button class="mini-btn" id="toggleAll" type="button"><svg class="i"><use href="#i-checkbox"/></svg><span>Marcar tudo</span></button>
+                      </div>
+                      <div class="bar"><i id="dBar"></i></div>
+                      <ul class="items" id="items"></ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Telas -->
+    <section class="screens" id="telas">
+      <div class="wrap">
+        <div class="section-head center reveal">
+          <span class="eyebrow">Telas</span>
+          <h2 class="h2">Um app com identidade</h2>
+          <p class="lead">Visual escuro, brilho neon e menus claros para você achar tudo sem esforço.</p>
+        </div>
+        <div class="phones reveal">
+          <figure class="phone-wrap"><div class="phone"><div class="screen s2" role="img" aria-label="Tela de abertura do Smartshop com carrinho futurista"></div></div><figcaption class="phone-cap">Crie, compartilhe, estilize<small>Tela de abertura</small></figcaption></figure>
+          <figure class="phone-wrap"><div class="phone"><div class="screen s1" role="img" aria-label="Tela inicial da lista no Smartshop"></div></div><figcaption class="phone-cap">Sua lista<small>Barra de ações no topo</small></figcaption></figure>
+          <figure class="phone-wrap"><div class="phone"><div class="screen s3" role="img" aria-label="Menu Opções da Lista com funções, compartilhar e atalhos"></div></div><figcaption class="phone-cap">Opções da lista<small>Funções, compartilhar e atalhos</small></figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Como compartilhar -->
+    <section class="share" id="compartilhar">
+      <div class="wrap">
+        <div class="section-head center reveal">
+          <span class="eyebrow">Compartilhar</span>
+          <h2 class="h2">Da sua lista para o celular de quem importa</h2>
+          <p class="lead">Três passos e a lista chega pronta para uso.</p>
+        </div>
+        <div class="timeline">
+          <div class="tl reveal"><h3>Crie a lista</h3><p>Adicione seus produtos no Smartshop e organize como preferir.</p></div>
+          <div class="tl reveal"><h3>Compartilhe</h3><p>No menu da lista, escolha <strong>Compartilhar</strong> e envie o link.</p></div>
+          <div class="tl reveal"><h3>Abra no app</h3><p>Quem recebe toca em <strong>Abrir no Smartshop</strong> e a lista é importada.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Download -->
+    <section class="get" id="baixar">
+      <div class="wrap">
+        <div class="get-card reveal">
+          <div class="cart-sm" aria-hidden="true"></div>
+          <div>
+            <h2 class="wordmark" style="font-size:clamp(34px,7vw,52px);margin-bottom:12px">Baixe o Smartshop</h2>
+            <p>Leve suas listas no bolso. Baixe a versão mais recente para Android e comece agora.</p>
+            <a class="btn btn-primary" href="https://github.com/ryckteixeira-sketch/smartshop/releases/latest" target="_blank" rel="noopener noreferrer"><svg class="i"><use href="#i-download"/></svg> Baixar Smartshop (Android)</a>
+            <small>Arquivo APK na página de versões do GitHub.</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <a class="brand" href="#topo"><span class="brand-logo" aria-hidden="true"></span><span class="wordmark">Smartshop</span></a>
+      <nav aria-label="Rodapé">
+        <a href="#recursos">Recursos</a>
+        <a href="#painel">Painel</a>
+        <a href="#compartilhar">Compartilhar</a>
+        <a href="https://github.com/ryckteixeira-sketch/smartshop" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </nav>
+      <p>© <span id="year">2026</span> Smartshop</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var $ = function (s) { return document.querySelector(s); };
+      $('#year').textContent = new Date().getFullYear();
+
+      /* ---------- Menu mobile ---------- */
+      var burger = $('#burger'), menu = $('#mobileMenu'), burgerIcon = $('#burgerIcon');
+      function setMenu(open) {
+        menu.classList.toggle('open', open);
+        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        burgerIcon.firstElementChild.setAttribute('href', open ? '#i-close' : '#i-menu');
+      }
+      burger.addEventListener('click', function () { setMenu(!menu.classList.contains('open')); });
+      menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
+
+      /* ---------- Revelar ao rolar ---------- */
+      var revealEls = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+        }, { threshold: 0.12 });
+        revealEls.forEach(function (el) { io.observe(el); });
+      } else {
+        revealEls.forEach(function (el) { el.classList.add('in'); });
+      }
+
+      /* ---------- Lista compartilhada (função original) ---------- */
+      var isAndroid = /android/i.test(navigator.userAgent || '');
+      var statusText = $('#statusText'), tokenBox = $('#tokenBox'), tokenInput = $('#tokenInput');
+      var openBtn = $('#openAppBtn'), copyBtn = $('#copyBtn'), copyLabel = $('#copyLabel');
+      var token = '';
+
+      function extractToken(str) {
+        str = (str || '').trim();
+        var m = str.match(/[?#&]token=([^&#\s]+)/i);
+        if (m && m[1]) { try { return decodeURIComponent(m[1]).trim(); } catch (e) { return m[1].trim(); } }
+        return str;
+      }
+
+      var params = new URLSearchParams(window.location.search);
+      var urlToken = (params.get('token') || '').trim();
+      if (!urlToken && window.location.hash && window.location.hash.indexOf('token=') !== -1) {
+        var hashMatch = window.location.hash.match(/token=([^&#\s]+)/i);
+        if (hashMatch && hashMatch[1]) {
+          try { urlToken = decodeURIComponent(hashMatch[1]).trim(); } catch (e) { urlToken = hashMatch[1].trim(); }
+        }
+      }
+
+      function links(t) {
+        var enc = encodeURIComponent(t);
+        return {
+          intent: 'intent://import?token=' + enc + '#Intent;scheme=smartshop;package=com.ryckteixeira.smartshop;end',
+          scheme: 'smartshop://import?token=' + enc
+        };
+      }
+
+      function setToken(t) {
+        token = (t || '').trim();
+        var on = !!token;
+        if (on) {
+          var l = links(token);
+          openBtn.href = isAndroid ? l.intent : l.scheme;
+        } else {
+          openBtn.href = '#';
+        }
+        openBtn.classList.toggle('is-disabled', !on);
+        openBtn.setAttribute('aria-disabled', on ? 'false' : 'true');
+        copyBtn.disabled = !on;
+      }
+
+      var resetTimer;
+      function showCopied() {
+        copyLabel.textContent = 'Código copiado!';
+        copyBtn.classList.add('done');
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(function () { copyLabel.textContent = 'Copiar código'; copyBtn.classList.remove('done'); }, 2200);
+      }
+      function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try { document.execCommand('copy'); showCopied(); } catch (e) {}
+        document.body.removeChild(ta);
+      }
+
+      openBtn.addEventListener('click', function (e) { if (!token) e.preventDefault(); });
+      copyBtn.addEventListener('click', function () {
+        if (!token) return;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(token).then(showCopied).catch(function () { fallbackCopy(token); });
+        } else {
+          fallbackCopy(token);
+        }
+      });
+      tokenInput.addEventListener('input', function () {
+        setToken(extractToken(tokenInput.value));
+        statusText.textContent = token
+          ? 'Código pronto! Toque em “Abrir no Smartshop” para importar a lista.'
+          : 'Nenhum código de lista foi encontrado neste link. Se você recebeu um código, cole abaixo para abrir no Smartshop.';
+      });
+
+      // Botão "Colar": lê o código da área de transferência
+      $('#pasteBtn').addEventListener('click', function () {
+        function apply(txt) {
+          tokenInput.value = extractToken(txt);
+          tokenInput.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        if (navigator.clipboard && navigator.clipboard.readText) {
+          navigator.clipboard.readText().then(apply).catch(function () { tokenInput.focus(); });
+        } else {
+          tokenInput.focus();
+        }
+      });
+
+      if (urlToken) {
+        document.body.classList.add('has-token');
+        document.title = 'Smartshop — Lista Compartilhada';
+        statusText.textContent = 'Você recebeu uma lista compartilhada! Toque abaixo para abrir direto no aplicativo Smartshop.';
+        tokenBox.textContent = urlToken;
+        tokenBox.classList.remove('hidden');
+        $('#inputRow').classList.add('hidden');
+        setToken(urlToken);
+        window.scrollTo(0, 0);
+        // Tenta abrir o app Android automaticamente ao carregar a página
+        if (isAndroid) {
+          setTimeout(function () { window.location.href = links(urlToken).scheme; }, 250);
+        }
+      }
+
+      /* ---------- Painel interativo (prévia) ---------- */
+      function mk(arr, doneN) { return arr.map(function (t, i) { return { t: t, d: i < doneN }; }); }
+      var lists = [
+        { name: 'Precisa comprar', color: '#ef3340', items: mk(['Arroz 5 kg', 'Feijão carioca', 'Café torrado', 'Leite integral', 'Ovos (dúzia)', 'Tomate', 'Sabão em pó', 'Papel higiênico'], 3) },
+        { name: 'Estoque', color: '#f5a524', items: mk(['Azeite', 'Macarrão', 'Açúcar', 'Sal', 'Farinha de trigo', 'Óleo de soja'], 5) },
+        { name: 'Geral', color: '#34d399', items: mk(['Pilhas AA', 'Lâmpada LED', 'Fita adesiva', 'Sacos de lixo'], 1) },
+        { name: 'Check list cliente', color: '#8b3dff', items: mk(['Conferir pedido', 'Confirmar endereço', 'Enviar orçamento', 'Emitir nota', 'Agendar entrega', 'Pós-venda'], 2) }
+      ];
+      var sel = 0, C = 2 * Math.PI * 22;
+      var cardsEl = $('#listCards'), itemsEl = $('#items');
+
+      function pct(l) { var d = l.items.filter(function (i) { return i.d; }).length; return l.items.length ? Math.round(d / l.items.length * 100) : 0; }
+      function done(l) { return l.items.filter(function (i) { return i.d; }).length; }
+
+      lists.forEach(function (l, idx) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'list-card';
+        b.innerHTML =
+          '<span class="dot" style="background:' + l.color + ';color:' + l.color + '"></span>' +
+          '<span class="lc-body"><span class="lc-name">' + l.name + '</span><span class="lc-meta"></span></span>' +
+          '<svg class="ring" viewBox="0 0 56 56" aria-hidden="true"><circle class="ring-bg" cx="28" cy="28" r="22"/>' +
+          '<circle class="ring-fg" cx="28" cy="28" r="22" style="stroke:' + l.color + ';color:' + l.color + ';stroke-dasharray:0 ' + C + '"/>' +
+          '<text x="28" y="32.5" text-anchor="middle">0%</text></svg>';
+        b.addEventListener('click', function () { sel = idx; renderAll(); });
+        l.el = b;
+        cardsEl.appendChild(b);
+      });
+
+      function renderItems() {
+        var l = lists[sel];
+        itemsEl.innerHTML = '';
+        l.items.forEach(function (it) {
+          var li = document.createElement('li');
+          li.className = 'item' + (it.d ? ' done' : '');
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.setAttribute('role', 'checkbox');
+          b.setAttribute('aria-checked', it.d ? 'true' : 'false');
+          b.innerHTML = '<span class="box"><svg class="i"><use href="#i-check"/></svg></span><span class="txt"></span>';
+          b.lastChild.textContent = it.t;
+          b.addEventListener('click', function () { it.d = !it.d; updateAll(); li.className = 'item' + (it.d ? ' done' : ''); b.setAttribute('aria-checked', it.d ? 'true' : 'false'); });
+          li.appendChild(b);
+          itemsEl.appendChild(li);
+        });
+      }
+
+      function updateAll() {
+        var totalItems = 0, totalDone = 0;
+        lists.forEach(function (l, idx) {
+          var p = pct(l), d = done(l);
+          totalItems += l.items.length; totalDone += d;
+          l.el.setAttribute('aria-pressed', idx === sel ? 'true' : 'false');
+          l.el.querySelector('.lc-meta').textContent = l.items.length + ' itens · ' + d + ' concluídos';
+          l.el.querySelector('.ring-fg').style.strokeDasharray = (p / 100 * C) + ' ' + C;
+          l.el.querySelector('text').textContent = p + '%';
+        });
+        var cur = lists[sel];
+        $('#dName').textContent = cur.name;
+        $('#dSub').textContent = done(cur) + ' de ' + cur.items.length + ' itens concluídos';
+        $('#dBar').style.width = pct(cur) + '%';
+        var allDone = done(cur) === cur.items.length;
+        $('#toggleAll span').textContent = allDone ? 'Desmarcar tudo' : 'Marcar tudo';
+        $('#k1').textContent = lists.length;
+        $('#k2').textContent = totalItems;
+        $('#k3').textContent = (totalItems ? Math.round(totalDone / totalItems * 100) : 0) + '%';
+        $('#k4').textContent = totalItems - totalDone;
+      }
+      function renderAll() { renderItems(); updateAll(); }
+
+      $('#toggleAll').addEventListener('click', function () {
+        var cur = lists[sel], all = done(cur) === cur.items.length;
+        cur.items.forEach(function (i) { i.d = !all; });
+        renderAll();
+      });
+
+      $('#q').addEventListener('input', function (e) {
+        var q = e.target.value.trim().toLowerCase(), shown = 0;
+        lists.forEach(function (l) {
+          var ok = !q || l.name.toLowerCase().indexOf(q) !== -1;
+          l.el.classList.toggle('hidden', !ok);
+          if (ok) shown++;
+        });
+        $('#noResults').classList.toggle('hidden', shown > 0);
+      });
+
+      renderAll();
+    })();
+  </script>
+</body>
+</html>
